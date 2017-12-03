@@ -4,3 +4,4 @@ terraform.tfvars
 *.tfstate.backup
 *.tfstate
 .terraform.tfstate.lock.info
+ansible/roles/docker/tasks/docker.retry

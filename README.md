@@ -2,7 +2,21 @@
 
 ## Introduction
 
+This repos contains a complete installation of Kubernetes (k8s) using terraform to provision EC2 instances on AWS, and Ansible playbooks to install docker, etcd, k8s masters and nodes.
+You can manage number of masters and nodes in the terraforms variables (see master-count and node-count bellow)
+
+For sake of simplicity, etcd will be installed on the same instance(s) than the master(s).
+
 ### Terraform configuration
+
+* image-flavor: type of instance you want to create (for example "t2.micro") It is not possible at this time to have a different size of instance per type of server.
+* key-pair: name of the public key you declared in AWS to connect to your insances
+* aws-region: region of the AWS instance (for example "eu-west-1")
+* tag-name: name of the instance
+* tag-cpaccount: another tag (if you don't need it, remove it from terraform .tf)
+* master-count: number of master instances you want to create
+* node-count: number of nodes instances you want to create
+* aws-ssh-key: Path to your private key (variable named key-pair) you attached to the instances.
 
 ### Ansible configuration
 
