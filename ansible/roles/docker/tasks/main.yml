@@ -1,33 +1,15 @@
 - hosts: all
   become: true
 
-  gather_facts: false
-  pre_tasks:
-    - name: Install python2 for Ansible
-      raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)"
-      register: output
-      changed_when: output.stdout != ""
-    - name: Gathering Facts
-      setup:
-
   tasks:
-    - name: ensure repository key is installed
-      apt_key:
-        id: "58118E89F3A912897C070ADBF76221572C52609D"
-        keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-        state: present
-
-    - name: ensure docker registry is available
-      # For Ubuntu 14.04 LTS, use this repository:
-      # apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-trusty main' state=present
-      # For Ubuntu 16.04 LTS, use this repo instead:
-      apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main' state=present
 
     - name: ensure docker and dependencies are installed
-      apt: name=docker-engine update_cache=yes
+      apt: name=docker.io update_cache=yes
 
-    # Uncomment the following to enable insecure registries with Docker
-    #- name: ensure docker can use insecure registries in 10.11.0.0/16
-    #  lineinfile: "dest=/etc/default/docker regexp=^DOCKER_OPTS line=DOCKER_OPTS='--insecure-registry 10.11.0.0/16'"
+    - name: 'add user to docker group'
+      user:
+        name: 'ubuntu'
+        groups: 'docker'
+        append: 'yes'
 
     - service: name=docker state=restarted
